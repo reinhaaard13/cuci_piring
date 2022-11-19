@@ -1,13 +1,30 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "../../lib/dbConnect";
+import User from "../../models/User";
 
 type Data = {
-  name: string
-}
+	user: {
+		name: string;
+		email: string;
+		_id: string;
+		__v: number;
+	};
+};
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+export default async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+	await dbConnect();
+
+	let user;
+	try {
+		user = await User.create({
+			name: "Daniel Mustakim",
+			email: "daniel@gmail.com",
+		});
+	} catch {}
+
+	return res.status(200).json({ user });
 }
