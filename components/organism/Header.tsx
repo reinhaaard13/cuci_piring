@@ -4,11 +4,12 @@ import { useMantineTheme } from "@mantine/styles";
 import { Flex, Text, ActionIcon, Box, Avatar } from "@mantine/core";
 import { TbMoonStars } from "react-icons/tb";
 import { IoEllipsisVertical } from "react-icons/io5";
+import useColorScheme from "../../hooks/useColorScheme";
 
 type Props = {};
 
 const Header = (props: Props) => {
-	const theme = useMantineTheme();
+	const { toggleColorScheme } = useColorScheme()
 
 	return (
 		<Flex
@@ -25,6 +26,9 @@ const Header = (props: Props) => {
 				[theme.fn.largerThan("lg")]: {
 					margin: "16px auto",
 				},
+				position: "sticky",
+				top: 10,
+				zIndex: 100,
 			})}
 		>
 			<Text
@@ -41,7 +45,7 @@ const Header = (props: Props) => {
 				})}
 			>
 				<Flex gap={8} align={"center"}>
-					<ActionIcon size={"lg"} variant="light">
+					<ActionIcon size={"lg"} variant="light" onClick={toggleColorScheme}>
 						<TbMoonStars />
 					</ActionIcon>
 					<ActionIcon size={"lg"} variant="light">
