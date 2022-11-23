@@ -12,8 +12,8 @@ const LikeButton = (props: Props) => {
 		<UnstyledButton
 			sx={{
 				position: "absolute",
-				top: theme.spacing.xs,
-				right: theme.spacing.xs,
+				top: 0,
+				right: 0,
 				color: theme.colors.gray[5],
 				transition: "all 0.1s ease-in-out",
 				textAlign: "center",

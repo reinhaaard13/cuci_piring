@@ -10,7 +10,6 @@ type Props = {}
 const Hero = (props: Props) => {
   return (
     <Box sx={(theme) => ({
-      margin: theme.spacing.md,
       padding: theme.spacing.md,
       maxWidth: theme.breakpoints.lg,
       background: theme.fn.linearGradient(225, "rgb(61,245,167)", "rgb(9,111,224)"),
@@ -19,10 +18,6 @@ const Hero = (props: Props) => {
       marginTop: 80,
       display: "flex",
       height: 100,
-      [theme.fn.largerThan("lg")]: {
-        margin: `${theme.spacing.md}px auto`,
-        marginTop: 80,
-      }
     })}>
       <Text sx={theme => ({
         fontSize: theme.fontSizes.xl,
@@ -30,12 +25,14 @@ const Hero = (props: Props) => {
         lineHeight: 1.15,
         alignSelf: "end",
         justifySelf: "end",
+        maxWidth: "70%",
+        zIndex: 1,
       })}>
         Cuci piring adalah bagian dari iman
       </Text>
       <Image src={HeroImage} alt="Hero Image" height={125} style={{
         position: "absolute",
-        left: 20,
+        right: 0,
         bottom: 40,
       }} />
     </Box>
