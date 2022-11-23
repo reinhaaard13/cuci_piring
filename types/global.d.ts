@@ -1,11 +1,5 @@
 import mongoose, { Connection, Mongoose } from "mongoose"
 
-// declare module NodeJS {
-//   interface Global {
-//     mongoose: Connection
-//   }
-// }
-
 declare global {
   var mongoose: {
     conn: Connection | null
@@ -13,4 +7,10 @@ declare global {
   }
 }
 
-export {}
+declare interface ApiResponse<Data = undefined> {
+  status: string
+  message: string
+  data: Data
+}
+
+declare type AccessToken = string

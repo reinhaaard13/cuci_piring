@@ -1,3 +1,4 @@
+import { NotificationsProvider } from "@mantine/notifications";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import MainLayout from "../components/layouts/MainLayout";
@@ -19,9 +20,11 @@ export default function App(props: AppProps) {
 
 			<ColorSchemeProvider>
 				<MantineProviders>
-					<MainLayout>
-						<Component {...pageProps} />
-					</MainLayout>
+					<NotificationsProvider position="top-right">
+						<MainLayout>
+							<Component {...pageProps} />
+						</MainLayout>
+					</NotificationsProvider>
 				</MantineProviders>
 			</ColorSchemeProvider>
 		</>

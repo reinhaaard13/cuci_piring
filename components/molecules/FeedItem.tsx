@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Grid, useMantineTheme } from "@mantine/core";
+import { Grid, useMantineTheme, Avatar } from "@mantine/core";
 import { Box, Text, Card } from "@mantine/core";
 import moment from "moment";
 import FeedItemMeta from "../atoms/FeedItemMeta";
@@ -26,6 +26,13 @@ const FeedItem = (props: Props) => {
 				radius="md"
 				withBorder
 			>
+				<Card.Section>
+					<FeedItemMeta
+						user={props.feed.created_by}
+						time={props.feed.created_at}
+					/>
+				</Card.Section>
+
 				<Card.Section
 					sx={{
 						position: "relative",
@@ -48,10 +55,6 @@ const FeedItem = (props: Props) => {
 						{props.feed.description}
 					</Text>
 
-					<FeedItemMeta
-						user={props.feed.created_by}
-						time={props.feed.created_at}
-					/>
 					<LikeButton />
 				</Box>
 			</Card>
