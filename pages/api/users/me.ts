@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+import jwt from "jsonwebtoken";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -11,14 +12,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { authorization } = req.headers;
   const token = authorization?.split(" ")[1];
-  // ? Token is not provided yet
+  
+  if (!token) {
+    return res.status(401).json({
+      status: "error",
+      message: "Token is not provided!"
+    });
+  }
 
   try {
-    
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET!);
+    return res.status(200).json({
+      status: "success",
+      message: "User data retrieved successfully",
+      data: decodedToken
+    })
   } catch (error) {
-    return res.status(500).json({
+    return res.status(401).json({
       status: "error",
-      message: "Internal server error"
+      message: "Token is invalid!"
     });
   }
 }

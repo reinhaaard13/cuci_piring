@@ -14,3 +14,9 @@ declare interface ApiResponse<Data = undefined> {
 }
 
 declare type AccessToken = string
+
+declare interface User {
+  id: string
+  username: string
+  fullname: string
+}

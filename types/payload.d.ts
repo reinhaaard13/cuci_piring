@@ -9,3 +9,9 @@ export interface LoginPayload {
   username: string
   password: string
 }
+
+export interface CreateFamilyPayload {
+  familyName: string
+  familyBio: string
+  image: File | undefined
+}

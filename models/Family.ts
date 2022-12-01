@@ -3,6 +3,7 @@ import { Schema, model, Types, models, Document } from "mongoose";
 export interface IFamily extends Document {
   familyName: string
   familyBio: string
+  image: string
   createdAt: Date
   createdBy: Types.ObjectId
   members: Types.ObjectId[]
@@ -11,6 +12,7 @@ export interface IFamily extends Document {
 const FamilySchema = new Schema({
   familyName: String,
   familyBio: String,
+  image: String,
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: "User",

@@ -55,7 +55,7 @@ const LoginForm = (props: Props) => {
 				reset();
 
 				axios.defaults.headers.common["Authorization"] = `Bearer ${Token.getToken()}`
-
+				
 				router.replace("/")
 			}
 		} catch (err) {
