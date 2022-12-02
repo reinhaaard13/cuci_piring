@@ -5,7 +5,7 @@ export interface IUser extends Document {
   username: string;
   password: string;
   createdAt: Date;
-  family: Types.ObjectId;
+  family: Types.ObjectId[];
 }
 
 const UserSchema = new Schema<IUser>({
@@ -20,7 +20,7 @@ const UserSchema = new Schema<IUser>({
   },
   password: String,
   family: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: "Family",
   }
 }, {

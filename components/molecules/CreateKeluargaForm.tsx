@@ -17,6 +17,7 @@ import { IoImageOutline } from "react-icons/io5";
 import { CreateFamilyPayload } from "../../types/payload";
 import FamilyApi from "../../services/FamilyApi";
 import { showNotification } from "@mantine/notifications";
+import { QueryClient, useMutation, useQueryClient } from "react-query";
 
 type Props = {};
 
@@ -28,6 +29,19 @@ const CreateKeluargaForm = (props: Props) => {
 	const theme = useMantineTheme();
 	const isMobile = useMediaQuery("(max-width: 480px)");
 	const fileUploadRef = useRef<HTMLInputElement>(null);
+	const queryClient = useQueryClient()
+
+	const createFamilyMutation = useMutation(FamilyApi.createFamily, {
+		onSuccess: (data) => {
+			reset();
+			setOpened(false);
+			showNotification({
+				title: "Berhasil membuat keluarga",
+				message: `Keluarga ${data.data.familyName} berhasil dibuat!`,
+			})
+			queryClient.invalidateQueries("Family")
+		}
+	})
 
 	const {
 		control,
@@ -57,16 +71,7 @@ const CreateKeluargaForm = (props: Props) => {
 	};
 
 	const submitHandler = async (values: CreateFamilyPayload) => {
-		const response = await FamilyApi.createFamily(values);
-
-		if (response.status === "success") {
-			reset();
-			setOpened(false);
-			showNotification({
-				title: "Berhasil membuat keluarga",
-				message: `Keluarga ${values.familyName} berhasil dibuat!`,
-			})
-		}
+		await createFamilyMutation.mutateAsync(values)
 	}
 
 	return (

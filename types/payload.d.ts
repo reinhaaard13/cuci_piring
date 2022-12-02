@@ -15,3 +15,8 @@ export interface CreateFamilyPayload {
   familyBio: string
   image: File | undefined
 }
+
+export interface JoinFamilyPayload {
+  familyCode: string
+  userId: string
+}

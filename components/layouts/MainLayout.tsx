@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import Header from "../organism/Header";
 import UserApi from "../../services/UserApi";
 import { useRouter } from "next/router";
+import useUser from "../../hooks/useUser";
 
 type Props = {
 	children: React.ReactNode;

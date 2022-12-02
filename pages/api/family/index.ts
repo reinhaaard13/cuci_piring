@@ -1,9 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../lib/dbConnect";
 import Family from "../../../models/Family";
+import mongoose from "mongoose";
 
 import nextConnect from "next-connect";
 import checkAuth, { ExtendedRequest } from "../../../middleware/checkAuth";
+import generateFamilyCode from "../../../utils/generateFamilyCode";
+import User from "../../../models/User";
 
 const handler = nextConnect()
   .use(checkAuth)
@@ -22,21 +25,32 @@ const handler = nextConnect()
 		const family = req.body;
 
 		try {
-			const newFamily = await Family.create({
+			const session = await mongoose.startSession();
+			session.startTransaction();
+
+			const newFamily = new Family({
         ...family,
         createdBy: req.user.id,
       });
       newFamily.members.push(req.user.id);
-      await newFamily.save();
+			newFamily.familyCode = generateFamilyCode(newFamily.familyName);
+      await newFamily.save({ session });
+
+			const user = await User.findById(req.user.id);
+			user.family.push(newFamily._id);
+			await user.save({ session });
+
+			await session.commitTransaction();
+			
 			return res.status(201).json({
 				status: "success",
 				message: "Family created successfully",
 				data: newFamily,
 			});
-		} catch (error) {
+		} catch (error: any) {
 			return res.status(500).json({
 				status: "error",
-				message: "Failed to create family",
+				message: `Failed to create family: ${error.message}`,
 			});
 		}
 	}

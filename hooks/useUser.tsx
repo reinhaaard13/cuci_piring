@@ -1,14 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useContext } from 'react'
+import UserContext from '../contexts/UserContext'
 
-type Props = {}
-
-const useUser = (props: Props) => {
-  const [user, setUser] = React.useState(null)
-  const [authenticated, setAuthenticated] = React.useState(false)
-
-  useEffect(() => {
-    
-  }, [])
-}
+const useUser = () => useContext(UserContext)
 
 export default useUser

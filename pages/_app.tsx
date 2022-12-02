@@ -8,6 +8,7 @@ import ColorSchemeProvider from "../providers/ColorSchemeProvider";
 import MantineProviders from "../providers/MantineProviders";
 import { QueryClient, QueryClientProvider } from "react-query";
 import WithAxios from "../components/layouts/WithAxios";
+import UserProvider from "../providers/UserProvider";
 
 const queryClient = new QueryClient();
 
@@ -37,9 +38,11 @@ export default function App(props: AppProps) {
 										<Component {...pageProps} />
 									</AuthLayout>
 								) : (
-									<MainLayout>
-										<Component {...pageProps} />
-									</MainLayout>
+									<UserProvider>
+										<MainLayout>
+											<Component {...pageProps} />
+										</MainLayout>
+									</UserProvider>
 								)}
 							</WithAxios>
 						</NotificationsProvider>
