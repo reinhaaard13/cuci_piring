@@ -30,13 +30,13 @@ const handler = nextConnect()
 
 			const newFamily = new Family({
         ...family,
-        createdBy: req.user.id,
+        createdBy: req.user._id,
       });
-      newFamily.members.push(req.user.id);
+      newFamily.members.push(req.user._id);
 			newFamily.familyCode = generateFamilyCode(newFamily.familyName);
       await newFamily.save({ session });
 
-			const user = await User.findById(req.user.id);
+			const user = await User.findById(req.user._id);
 			user.family.push(newFamily._id);
 			await user.save({ session });
 

@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import dbConnect from "../../../lib/dbConnect";
+import dbConnect from "../../../../lib/dbConnect";
 import mongoose from "mongoose";
-import checkAuth, { ExtendedRequest } from "../../../middleware/checkAuth";
-import Family from "../../../models/Family";
-import User from "../../../models/User";
+import checkAuth, { ExtendedRequest } from "../../../../middleware/checkAuth";
+import Family from "../../../../models/Family";
+import User from "../../../../models/User";
 
 const handler = nextConnect()
 	.get(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -44,6 +44,6 @@ const handler = nextConnect()
 				message: `Database query error: ${err}`,
 			});
 		}
-	})
+	});
 
 export default handler;

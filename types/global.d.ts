@@ -16,7 +16,18 @@ declare interface ApiResponse<Data = undefined> {
 declare type AccessToken = string
 
 declare interface User {
-  id: string
+  _id: string
   username: string
   fullname: string
+}
+
+declare interface Keluarga {
+  _id: string
+  familyName: string
+  familyBio: string
+  image: string
+  createdBy: User | string
+  createdAt: Date
+  familyCode: string
+  members: User[] | string[]
 }

@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const token = jwt.sign({
-      id: user._id,
+      _id: user._id,
       username: user.username,
       fullname: user.fullname,
     }, process.env.JWT_SECRET!, {

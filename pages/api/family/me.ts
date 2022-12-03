@@ -17,7 +17,7 @@ const handler = nextConnect()
 		}
 
 		try {
-			const family = await Family.find({ members: req.user.id });
+			const family = await Family.find({ members: req.user._id });
       if (!family) {
         return res.status(204).json({
           status: "success",

@@ -1,5 +1,5 @@
 import { Divider } from "@mantine/core"
-import NewFeedButton from "../components/atoms/NewFeedButton";
+import NewPostButton from "../components/atoms/NewPostButton";
 import CreateKeluargaForm from "../components/molecules/CreateKeluargaForm";
 import JoinKeluargaForm from "../components/organism/JoinKeluargaForm";
 import FeedSection from "../components/organism/FeedSection";

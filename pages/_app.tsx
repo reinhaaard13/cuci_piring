@@ -9,6 +9,7 @@ import MantineProviders from "../providers/MantineProviders";
 import { QueryClient, QueryClientProvider } from "react-query";
 import WithAxios from "../components/layouts/WithAxios";
 import UserProvider from "../providers/UserProvider";
+import { ModalsProvider } from "@mantine/modals";
 
 const queryClient = new QueryClient();
 
@@ -31,21 +32,23 @@ export default function App(props: AppProps) {
 			<QueryClientProvider client={queryClient}>
 				<ColorSchemeProvider>
 					<MantineProviders>
-						<NotificationsProvider position="top-right">
-							<WithAxios>
-								{isAuthPage ? (
-									<AuthLayout>
-										<Component {...pageProps} />
-									</AuthLayout>
-								) : (
-									<UserProvider>
-										<MainLayout>
+						<ModalsProvider>
+							<NotificationsProvider position="top-right">
+								<WithAxios>
+									{isAuthPage ? (
+										<AuthLayout>
 											<Component {...pageProps} />
-										</MainLayout>
-									</UserProvider>
-								)}
-							</WithAxios>
-						</NotificationsProvider>
+										</AuthLayout>
+									) : (
+										<UserProvider>
+											<MainLayout>
+												<Component {...pageProps} />
+											</MainLayout>
+										</UserProvider>
+									)}
+								</WithAxios>
+							</NotificationsProvider>
+						</ModalsProvider>
 					</MantineProviders>
 				</ColorSchemeProvider>
 			</QueryClientProvider>

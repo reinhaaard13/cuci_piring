@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import { User } from "../types/global";
 import { authenticateJwt } from "../utils/authenticateJwt";
 
 export interface ExtendedRequest extends NextApiRequest {

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query';
 import UserContext from '../contexts/UserContext'
 import UserApi from '../services/UserApi';
-import { User } from '../types/global';
 
 type Props = {
   children: React.ReactNode;

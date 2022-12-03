@@ -25,14 +25,6 @@ const MyKeluargaSection = (props: Props) => {
 
 	const isFamilyFound = isSuccess && familyData?.data?.length > 0;
 
-	let cardConfig = {};
-	if (isFamilyFound) {
-		cardConfig = {
-			component: Link,
-			href: "/keluarga/1",
-		};
-	}
-
 	return (
 		<Box
 			sx={{
@@ -42,12 +34,13 @@ const MyKeluargaSection = (props: Props) => {
 			<Text>Keluarga Saya</Text>
 
 			<Grid>
-				{isFamilyFound ? 
+				{isFamilyFound ? (
 					familyData.data.map((family: IFamily) => (
 						<Grid.Col md={6} key={family.familyCode}>
 							<Card
 								withBorder
-								{...cardConfig}
+								component={Link}
+								href={`/keluarga/${family.familyCode}`}
 								sx={{
 									display: "flex",
 									":hover": {
@@ -59,11 +52,6 @@ const MyKeluargaSection = (props: Props) => {
 								}}
 								radius="md"
 							>
-								{!isFamilyFound && (
-									<Text sx={{ textAlign: "center" }}>
-										Belum bergabung dengan keluarga
-									</Text>
-								)}
 								<Card.Section
 									sx={{
 										display: "flex",
@@ -101,16 +89,20 @@ const MyKeluargaSection = (props: Props) => {
 								</Card.Section>
 							</Card>
 						</Grid.Col>
-					)) : (
-						<Grid.Col span={12} sx={{
+					))
+				) : (
+					<Grid.Col
+						span={12}
+						sx={{
 							display: "flex",
 							justifyContent: "center",
 							alignItems: "center",
-							height: 100
-						}}>
-							<Text sx={{ opacity: "50%" }}>Belum bergabung dengan keluarga</Text>
-						</Grid.Col>
-					)}
+							height: 100,
+						}}
+					>
+						<Text sx={{ opacity: "50%" }}>Belum bergabung dengan keluarga</Text>
+					</Grid.Col>
+				)}
 			</Grid>
 		</Box>
 	);

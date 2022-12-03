@@ -21,7 +21,7 @@ const handler = nextConnect()
 		const userId = req.body.userId;
 		const familyCode = req.body.familyCode;
 
-		if (userId !== req.user.id) {
+		if (userId !== req.user._id) {
 			return res.status(401).json({
 				status: "error",
 				message: "Unauthorized",

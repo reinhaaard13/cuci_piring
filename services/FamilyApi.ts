@@ -20,6 +20,11 @@ class FamilyApi {
 		return response.data;
 	}
 
+	static async getPostsByFamilyCode(familyCode: string) {
+		const response = await axios.get(`/family/${familyCode}/posts`);
+		return response.data;
+	}
+
 	static async joinFamily(payload: JoinFamilyPayload) {
 		const response = await axios.post("/family/join", {
 			...payload

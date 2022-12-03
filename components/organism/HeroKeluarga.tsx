@@ -1,13 +1,24 @@
 import React from "react";
 
-import { Box, Text } from "@mantine/core";
+import { Box, Text, Skeleton } from "@mantine/core";
 import Image from "next/image";
 
 import HeroImage from "../../public/house.png";
+import { useQuery } from "react-query";
+import { useRouter } from "next/router";
+import FamilyApi from "../../services/FamilyApi";
+import spoilMembersNames from "../../utils/spoilMembersNames";
 
 type Props = {};
 
 const HeroKeluarga = (props: Props) => {
+	const router = useRouter();
+
+	const { data, isSuccess } = useQuery(
+		["Family", router.query.familyCode],
+		() => FamilyApi.getPostsByFamilyCode(router.query.familyCode as string)
+	);
+
 	return (
 		<Box
 			sx={(theme) => ({
@@ -39,7 +50,7 @@ const HeroKeluarga = (props: Props) => {
 					zIndex: 1,
 				})}
 			>
-				Sweetdream Family
+				<Skeleton visible={!isSuccess}>{data?.data.familyName}</Skeleton>
 			</Text>
 			<Text
 				sx={(theme) => ({
@@ -50,7 +61,11 @@ const HeroKeluarga = (props: Props) => {
 					opacity: 0.6,
 				})}
 			>
-				Daniel, Marlin, +2 people
+				{data?.data.members && (
+					<Skeleton visible={!isSuccess}>
+						{spoilMembersNames(data?.data.members)}
+					</Skeleton>
+				)}
 			</Text>
 
 			<Image

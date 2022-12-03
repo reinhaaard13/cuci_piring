@@ -60,12 +60,12 @@ const JoinKeluargaForm = (props: Props) => {
 	const joinKeluargaHandler = () => {
 		joinKeluargaMutation.mutate({
 			familyCode: data?.data.familyCode as string,
-			userId: userData?.id as string,
+			userId: userData?._id as string,
 		});
 	};
 
-	const isJoined = data?.data.members.some(
-		(member) => member._id === userData?.id
+	const isJoined = data?.data?.members.some(
+		(member) => member._id === userData?._id
 	);
 
 	return (
