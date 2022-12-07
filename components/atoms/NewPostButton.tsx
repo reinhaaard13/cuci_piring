@@ -17,9 +17,6 @@ const NewPostButton = (props: Props) => {
 		centered: true,
 		children: (
 			<>
-			<Text>
-				This will be a camera
-			</Text>
 			<Camera />
 			</>
 		),
