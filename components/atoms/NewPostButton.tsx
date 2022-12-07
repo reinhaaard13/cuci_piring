@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { IoIosCreate } from "react-icons/io";
 import { Box, ActionIcon, Text, Modal } from "@mantine/core";
-import { openConfirmModal } from "@mantine/modals";
+import { closeAllModals, openConfirmModal } from "@mantine/modals";
 import { useMediaQuery } from "@mantine/hooks";
 import Camera from "../organism/Camera";
 
@@ -10,6 +10,7 @@ type Props = {};
 
 const NewPostButton = (props: Props) => {
 	const isMobile = useMediaQuery("(max-width: 768px)");
+	const [imageUrl, setImageUrl] = useState<string | null>(null)
 
 	const openModal = () => openConfirmModal({
 		title: "Create new post",
@@ -17,13 +18,32 @@ const NewPostButton = (props: Props) => {
 		centered: true,
 		children: (
 			<>
-			<Camera />
+				<Camera setImageUrl={setImageUrl} imageUrl={imageUrl} />
 			</>
 		),
+		closeOnConfirm: false,
 		labels: {
 			confirm: "Next",
 			cancel: "Cancel",
-		}
+		},
+		onConfirm: () => openConfirmModal({
+			title: "Add Post Details",
+			fullScreen: isMobile,
+			centered: true,
+			children: (
+				<>
+					PostDetail Here
+				</>
+			),
+			labels: {
+				confirm: "Post",
+				cancel: "Cancel",
+			},
+			onConfirm: () => {
+				closeAllModals()
+				setImageUrl(null)
+			}
+		})
 	})
 
 	return (
@@ -31,7 +51,7 @@ const NewPostButton = (props: Props) => {
 			size={60}
 			color={"cyan"}
 			variant={"filled"}
-			radius={"lg"}
+			radius={"xl"}
 			sx={(theme) => ({
 				position: "fixed",
 				bottom: theme.spacing.lg,

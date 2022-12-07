@@ -1,9 +1,13 @@
 import { Text, Box, UnstyledButton } from "@mantine/core";
+import Image from "next/image";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { TbCameraRotate } from "react-icons/tb";
-import { FacingMode, Stream } from "../../types/camera";
+import { FacingMode, SetImageUrl, Stream } from "../../types/camera";
 
-type Props = {};
+type Props = {
+	setImageUrl: SetImageUrl;
+	imageUrl: string | null;
+};
 
 interface MediaSourceExtended extends MediaSource {
 	getTracks: () => MediaStreamTrack[];
@@ -15,13 +19,13 @@ interface HTMLVideoElementExtended extends HTMLVideoElement {
 }
 
 const Camera = (props: Props) => {
-	const [imageDataUrl, setImageDataUrl] = useState(null);
-	const [cameraNumber, setCameraNumber] = useState(0);
+	const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+	const [numberOfCameras, setNumberOfCameras] = useState(0);
 	const [stream, setStream] = useState<Stream>(null);
 	const [facingMode, setFacingMode] = useState<FacingMode>("user");
 
-	const playerRef = useRef<HTMLVideoElementExtended | null>(null);
-	const streamRef = useRef<HTMLVideoElementExtended | null>(null);
+	const playerRef = useRef<HTMLVideoElementExtended>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	const initializeMedia = async () => {
 		if (stream) {
@@ -41,34 +45,15 @@ const Camera = (props: Props) => {
 				})
 				.then((stream) => {
 					setStream(stream);
+					navigator.mediaDevices.enumerateDevices().then((r) => {
+						setNumberOfCameras(
+							r.filter((device) => device.kind === "videoinput").length
+						);
+					});
 				});
 		} else {
 			alert("Camera not supported");
 		}
-
-		// const videoDevices = await getListOfVideoDevices();
-
-		// if (videoDevices.length) {
-		// 	try {
-		// 		const stream = await navigator.mediaDevices.getUserMedia({
-		// 			video: {
-		// 				deviceId: {
-		// 					exact: videoDevices[cameraNumber].deviceId,
-		// 				},
-		// 			},
-		// 		});
-
-		// 		playerRef.current!.srcObject = stream;
-		// 		await playerRef.current?.play();
-
-		// 		return playerRef.current;
-		// 	} catch (err) {
-		// 		console.log("error here");
-		// 		console.error(err);
-		// 	}
-		// } else {
-		// 	alert("No video devices found");
-		// }
 	};
 
 	useEffect(() => {
@@ -84,128 +69,134 @@ const Camera = (props: Props) => {
 	}, [stream]);
 
 	useEffect(() => {
-		initializeMedia()
-	}, [facingMode])
+		if (props.imageUrl) {
+			setImageDataUrl(props.imageUrl)
+			return
+		};
 
-	const getListOfVideoDevices = async () => {
-		await navigator.mediaDevices.getUserMedia({ video: true });
-		const devices = await navigator.mediaDevices.enumerateDevices();
+		initializeMedia();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [facingMode]);
 
-		return devices.filter((device) => device.kind === "videoinput");
-	};
+	const captureImage = () => {
+		if (numberOfCameras < 1) {
+			alert("No camera detected");
+			return;
+		}
 
-	const switchCamera = async () => {
-		// const videoInputsList = await getListOfVideoDevices();
+		if (canvasRef.current && playerRef?.current) {
+			const playerWidth = playerRef.current?.videoWidth || 1080;
+			const playerHeight = playerRef.current?.videoHeight || 1080;
+			const playerAspectRatio = playerWidth / playerHeight;
 
-		// if (videoInputsList.length > 1) {
-		// 	// will re-initialize in useEffect hook below
-		// 	setCameraNumber((prev) => (prev === 0 ? 1 : 0));
-		// } else if (videoInputsList.length === 1) {
-		// 	alert("Only one camera found");
-		// } else {
-		// 	alert("No camera found");
-		// }
+			canvasRef.current.width = playerWidth;
+			canvasRef.current.height = playerHeight;
 
-		if (facingMode === "user") {
-			setFacingMode("environment")
-		} else {
-			setFacingMode("user")
+			const context = canvasRef.current.getContext("2d");
+			context?.drawImage(
+				playerRef.current,
+				0,
+				0,
+				canvasRef.current.width,
+				canvasRef.current.height
+			);
+
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+			}
+
+			props.setImageUrl(canvasRef.current.toDataURL("image/png"));
+			setImageDataUrl(canvasRef.current.toDataURL("image/png"));
 		}
 	};
 
-	// useEffect(() => {
-	// 	initializeMedia().then((stream) => {
-	// 		if (stream) streamRef.current = stream;
-	// 	});
-
-	// 	return () => {
-	// 		if (streamRef.current && streamRef.current.srcObject) {
-	// 			const tracks = streamRef.current.srcObject.getTracks();
-	// 			tracks.forEach((track: MediaStreamTrack) => {
-	// 				track.stop();
-	// 				console.log("deactivating track: ", track.label);
-	// 			});
-	// 		}
-
-	// 		console.log("cleanup1");
-	// 	};
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [cameraNumber]);
-
-	const printCameraName = () => {
-		console.log(playerRef.current?.srcObject?.getTracks()[0].label);
-		// alert(playerRef.current?.srcObject?.getTracks()[0].label)
+	const switchCamera = async () => {
+		if (facingMode === "user") {
+			setFacingMode("environment");
+		} else {
+			setFacingMode("user");
+		}
 	};
-
-	console.log("Rerender", facingMode);
 
 	return (
 		<Box
 			sx={(theme) => ({
 				width: "100%",
-				aspectRatio: "4/3",
+				aspectRatio: "1/1",
 				borderRadius: theme.radius.md,
 				overflow: "hidden",
 				position: "relative",
 			})}
 		>
-			<video
-				ref={playerRef}
-				style={{ objectFit: "cover", width: "100%", height: "100%" }}
-				autoPlay
-				muted
-			></video>
-			<Box
-				sx={(theme) => ({
-					position: "absolute",
-					bottom: theme.spacing.lg,
-					right: theme.spacing.lg,
-					display: "flex",
-					flexDirection: "row-reverse",
-					gap: 15,
-					justifyContent: "center",
-					alignItems: "end",
-				})}
-			>
-				<UnstyledButton
+			{imageDataUrl ? (
+				<Image
+					src={imageDataUrl}
+					alt="photo"
+					fill={true}
+					style={{ objectFit: "cover" }}
+				/>
+			) : (
+				<video
+					ref={playerRef}
+					style={{ objectFit: "cover", width: "100%", height: "100%" }}
+					autoPlay
+					muted
+				></video>
+			)}
+			{!imageDataUrl && (
+				<Box
 					sx={(theme) => ({
-						height: 40,
-						width: 40,
-						backgroundColor: theme.white,
-						borderRadius: theme.radius.xl,
-						outlineWidth: 2,
-						outlineColor: theme.white,
-						outlineStyle: "solid",
-						outlineOffset: 4,
-						transition: "all 0.2s ease-in-out",
-
-						"&:hover": {
-							outlineColor: "rgba(255, 255, 255, 0.5)",
-						},
-					})}
-					onClick={printCameraName}
-				></UnstyledButton>
-				<UnstyledButton
-					sx={(theme) => ({
-						height: 30,
-						width: 30,
-						backgroundColor: theme.white,
-						color: theme.black,
-						borderRadius: theme.radius.xl,
-						transition: "all 0.2s ease-in-out",
+						position: "absolute",
+						bottom: theme.spacing.lg,
+						right: theme.spacing.lg,
 						display: "flex",
+						flexDirection: "row-reverse",
+						gap: 15,
 						justifyContent: "center",
-						alignItems: "center",
-
-						"&:hover": {
-							outlineColor: "rgba(255, 255, 255, 0.5)",
-						},
+						alignItems: "end",
 					})}
-					onClick={switchCamera}
 				>
-					<TbCameraRotate />
-				</UnstyledButton>
-			</Box>
+					<UnstyledButton
+						sx={(theme) => ({
+							height: 40,
+							width: 40,
+							backgroundColor: theme.white,
+							borderRadius: theme.radius.xl,
+							outlineWidth: 2,
+							outlineColor: theme.white,
+							outlineStyle: "solid",
+							outlineOffset: 4,
+							transition: "all 0.2s ease-in-out",
+
+							"&:hover": {
+								outlineColor: "rgba(255, 255, 255, 0.5)",
+							},
+						})}
+						onClick={captureImage}
+					></UnstyledButton>
+					<UnstyledButton
+						sx={(theme) => ({
+							height: 30,
+							width: 30,
+							backgroundColor: theme.white,
+							color: theme.black,
+							borderRadius: theme.radius.xl,
+							transition: "all 0.2s ease-in-out",
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+
+							"&:hover": {
+								outlineColor: "rgba(255, 255, 255, 0.5)",
+							},
+						})}
+						onClick={switchCamera}
+					>
+						<TbCameraRotate />
+					</UnstyledButton>
+					<canvas ref={canvasRef} style={{ display: "none" }} />
+				</Box>
+			)}
 		</Box>
 	);
 };
