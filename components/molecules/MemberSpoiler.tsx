@@ -17,8 +17,8 @@ const MemberSpoiler = (props: Props) => {
 
 	let members = props.members;
 
-	const fixedMembers = [...members.filter((member) => member._id !== user!.id)];
-	let me = members.find((member) => member._id === user!.id);
+	const fixedMembers = [...members.filter((member) => member._id !== user!._id)];
+	let me = members.find((member) => member._id === user!._id);
 	if (me) {
 		me.alias = "Kamu";
 		fixedMembers.unshift(me);
