@@ -17,7 +17,7 @@ import Image from "next/image";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import FamilyApi from "../../services/FamilyApi";
 import { ApiResponse } from "../../types/global";
-import { IFamily } from "../../models/Family";
+import { FamilyMembers, IFamily } from "../../models/Family";
 import MemberSpoiler from "../molecules/MemberSpoiler";
 import UserApi from "../../services/UserApi";
 import { showNotification } from "@mantine/notifications";
@@ -163,7 +163,7 @@ const JoinKeluargaForm = (props: Props) => {
 						</Text>
 
 						<MemberSpoiler
-							members={data.data.members}
+							members={data.data.members as FamilyMembers[]}
 							joined={isJoined || false}
 						/>
 
