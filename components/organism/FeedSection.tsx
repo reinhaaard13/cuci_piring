@@ -1,52 +1,26 @@
 import React from "react";
 
-import { Box, Grid, Text } from "@mantine/core";
+import { Box, Grid, Text, Skeleton, Flex, Card } from "@mantine/core";
 import FeedItem from "../molecules/FeedItem";
+import { useQuery } from "react-query";
+import PostApi from "../../services/PostApi";
+import { useRouter } from "next/router";
+import { ApiResponse } from "../../types/global";
+import { IFamily } from "../../models/Family";
+import Image from "next/image";
+import useColorScheme from "../../hooks/useColorScheme";
+import { IPost } from "../../models/Post";
 
 type Props = {};
 
 const FeedSection = (props: Props) => {
-	const DUMMY_FEED = [
-		{
-			task_id: 1,
-			title: "Task 1",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, cumque!",
-			created_at: "2022-11-20T00:00:00.000Z",
-			created_by: {
-				user_id: 1,
-				fullname: "Reinhard Kevin",
-			},
-			family_id: 1,
-			category_id: 1,
-		},
-		{
-			task_id: 2,
-			title: "Task 2",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, cumque!",
-			created_at: "2022-11-19T00:00:00.000Z",
-			created_by: {
-				user_id: 2,
-				fullname: "Herman Samosir",
-			},
-			family_id: 1,
-			category_id: 1,
-		},
-    {
-			task_id: 3,
-			title: "Task 3",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, cumque!",
-			created_at: "2022-11-16T00:00:00.000Z",
-			created_by: {
-				user_id: 1,
-				fullname: "Reinhard Kevin",
-			},
-			family_id: 1,
-			category_id: 1,
-		},
-	];
+	const { colorScheme } = useColorScheme()
+	const { query } = useRouter();
+
+	const { data, isSuccess, isLoading } = useQuery<ApiResponse<IFamily>>(
+		["Family", query.familyCode],
+		() => PostApi.getFamilyWithPosts(query.familyCode as string)
+	);
 
 	return (
 		<Box
@@ -56,7 +30,7 @@ const FeedSection = (props: Props) => {
 		>
 			<Text
 				sx={(theme) => ({
-          marginBottom: theme.spacing.xs,
+					marginBottom: theme.spacing.xs,
 					color:
 						theme.colorScheme === "light"
 							? theme.colors.gray[7]
@@ -67,9 +41,43 @@ const FeedSection = (props: Props) => {
 			</Text>
 
 			<Grid gutter={"sm"}>
-				{DUMMY_FEED.map((feed) => (
-					<FeedItem key={feed.task_id} feed={feed} />
-				))}
+				{isSuccess &&
+					data &&
+					data.data.posts.map((feed) => (
+						<FeedItem key={feed._id} feed={feed as IPost} />
+					))}
+				{isLoading && (
+					<Grid.Col sm={6}>
+						<Skeleton height={400}></Skeleton>
+					</Grid.Col>
+				)}
+				{isSuccess && data && data.data.posts.length === 0 && (
+					<Grid.Col sm={6}>
+						<Card
+							radius="md"
+							withBorder
+							component={Flex}
+							justify={"center"}
+							align={"center"}
+							direction={"column"}
+							mih={300}
+						>
+							<Image
+								src={
+									"https://res.cloudinary.com/reinhaaard/image/upload/v1670481044/cucipiring/emptybox_zkep99.svg"
+								}
+								alt="empty"
+								height={100}
+								width={100}
+								style={{
+									opacity: "50%",
+									filter: colorScheme === "dark" ? "invert(1)" : "invert(0)",
+								}}
+							/>
+							<Text opacity={"50%"}>Belum ada post.</Text>
+						</Card>
+					</Grid.Col>
+				)}
 			</Grid>
 		</Box>
 	);

@@ -7,12 +7,12 @@ export interface IPost extends Document {
   postDescription: string
   createdBy: Types.ObjectId | IUser
   family: Types.ObjectId | IFamily
-  createdAt: Date
+  createdAt: Date | string
   image: string
   likedBy: Types.ObjectId[] | IUser[]
 }
 
-const PostSchema = new Schema({
+const PostSchema = new Schema<IPost>({
   postTitle: String,
   postDescription: String,
   createdBy: {
@@ -33,7 +33,7 @@ const PostSchema = new Schema({
 }, {
   timestamps: {
     updatedAt: false,
-  }
+  },
 })
 
 export default models.Post || model("Post", PostSchema)

@@ -5,7 +5,7 @@ import { TbCameraRotate } from "react-icons/tb";
 import { FacingMode, SetImageUrl, Stream } from "../../types/camera";
 
 type Props = {
-	setImageUrl: SetImageUrl;
+	setImageUrl: (url: string) => void;
 	imageUrl: string | null;
 };
 
@@ -126,6 +126,7 @@ const Camera = (props: Props) => {
 				borderRadius: theme.radius.md,
 				overflow: "hidden",
 				position: "relative",
+				marginBottom: theme.spacing.md,
 			})}
 		>
 			{imageDataUrl ? (

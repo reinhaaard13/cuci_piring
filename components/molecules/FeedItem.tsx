@@ -6,9 +6,11 @@ import moment from "moment";
 import FeedItemMeta from "../atoms/FeedItemMeta";
 import LikeButton from "../atoms/LikeButton";
 import Image from "next/image";
+import { IPost } from "../../models/Post";
+import { IUser } from "../../models/User";
 
 type Props = {
-	feed: any;
+	feed: IPost;
 };
 
 const FeedItem = (props: Props) => {
@@ -28,8 +30,8 @@ const FeedItem = (props: Props) => {
 			>
 				<Card.Section>
 					<FeedItemMeta
-						user={props.feed.created_by}
-						time={props.feed.created_at}
+						user={props.feed.createdBy}
+						time={props.feed.createdAt as string}
 					/>
 				</Card.Section>
 
@@ -42,7 +44,7 @@ const FeedItem = (props: Props) => {
 				>
 					<Image
 						src={
-							"https://media.suara.com/pictures/653x366/2018/04/05/18230-cucian-piring-menumpuk-di-dapur.jpg"
+							props.feed.image
 						}
 						alt="Feed Image"
 						fill
@@ -50,12 +52,12 @@ const FeedItem = (props: Props) => {
 					/>
 				</Card.Section>
 				<Box style={{ position: "relative" }}>
-					<Text sx={{ fontWeight: 600 }}>{props.feed.title}</Text>
+					<Text sx={{ fontWeight: 600 }}>{props.feed.postTitle}</Text>
 					<Text sx={{ fontSize: theme.fontSizes.sm }}>
-						{props.feed.description}
+						{props.feed.postDescription}
 					</Text>
 
-					<LikeButton />
+					<LikeButton likedBy={props.feed.likedBy as IUser[]} postId={props.feed._id} />
 				</Box>
 			</Card>
 		</Grid.Col>

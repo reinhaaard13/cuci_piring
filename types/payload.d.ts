@@ -20,3 +20,11 @@ export interface JoinFamilyPayload {
   familyCode: string
   userId: string
 }
+
+export interface NewPostPayload {
+  postTitle: string
+  postDescription: string
+  image: string | null
+  familyId: string
+  userId: string
+}

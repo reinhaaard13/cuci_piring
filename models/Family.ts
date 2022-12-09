@@ -1,5 +1,7 @@
 import { Schema, model, Types, models, Document } from "mongoose";
 import generateFamilyCode from "../utils/generateFamilyCode";
+import { IPost } from "./Post";
+import { IUser } from "./User";
 
 export interface IFamily extends Document {
 	familyCode: string;
@@ -7,8 +9,9 @@ export interface IFamily extends Document {
 	familyBio: string;
 	image: string;
 	createdAt: Date;
-	createdBy: Types.ObjectId;
-	members: FamilyMembers[];
+	createdBy: Types.ObjectId | IUser;
+	members: Types.ObjectId[] | FamilyMembers[];
+	posts: Types.ObjectId[] | IPost[];
 }
 
 export interface FamilyMembers {
@@ -18,7 +21,7 @@ export interface FamilyMembers {
 	alias?: string;
 }
 
-const FamilySchema = new Schema(
+const FamilySchema = new Schema<IFamily>(
 	{
 		familyName: String,
 		familyBio: String,
@@ -39,6 +42,12 @@ const FamilySchema = new Schema(
 			{
 				type: Schema.Types.ObjectId,
 				ref: "User",
+			},
+		],
+		posts: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: "Post",
 			},
 		],
 	},

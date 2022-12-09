@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Text, Skeleton } from "@mantine/core";
+import { Box, Text, Skeleton, Badge } from "@mantine/core";
 import Image from "next/image";
 
 import HeroImage from "../../public/house.png";
@@ -8,16 +8,19 @@ import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import FamilyApi from "../../services/FamilyApi";
 import spoilMembersNames from "../../utils/spoilMembersNames";
+import PostApi from "../../services/PostApi";
+import { ApiResponse } from "../../types/global";
+import { FamilyMembers, IFamily } from "../../models/Family";
 
 type Props = {};
 
 const HeroKeluarga = (props: Props) => {
-	const router = useRouter();
+	const { query } = useRouter();
 
-	const { data, isSuccess } = useQuery(
-		["Family", router.query.familyCode],
-		() => FamilyApi.getPostsByFamilyCode(router.query.familyCode as string)
-	);
+	const { data, isSuccess } = useQuery<ApiResponse<IFamily>>(["Family", query.familyCode], () =>
+	PostApi.getFamilyWithPosts(query.familyCode as string)
+);
+	
 
 	return (
 		<Box
@@ -38,6 +41,7 @@ const HeroKeluarga = (props: Props) => {
 				height: 100,
 			})}
 		>
+			<Skeleton visible={!isSuccess}><Badge w={"fit-content"} variant="light" color={"orange"} opacity={"80%"} size={"xs"}>#{data?.data.familyCode}</Badge></Skeleton>
 			<Text
 				sx={(theme) => ({
 					fontSize: theme.fontSizes.xl,
@@ -63,7 +67,7 @@ const HeroKeluarga = (props: Props) => {
 			>
 				{data?.data.members && (
 					<Skeleton visible={!isSuccess}>
-						{spoilMembersNames(data?.data.members)}
+						{spoilMembersNames(data?.data.members as FamilyMembers[])}
 					</Skeleton>
 				)}
 			</Text>

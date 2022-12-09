@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Avatar, Flex, Text, useMantineTheme } from "@mantine/core";
 import moment from "moment";
+import getNameInitials from "../../utils/getNameInitial";
+import getRandomColor from "../../utils/getRandomColor";
 
 type Props = {
 	user: any;
 	time: string;
 };
 
-const FeedItemAuthor = (props: Props) => {
+const FeedItemMeta = (props: Props) => {
 	const theme = useMantineTheme();
+
+	const color = useMemo(() => getRandomColor(), [])
 
 	return (
 		<Flex
@@ -27,8 +31,8 @@ const FeedItemAuthor = (props: Props) => {
 			})}>
 				<Avatar
 					radius="xl"
-					src="https://media-exp1.licdn.com/dms/image/D5603AQH9vruzCj3Wjw/profile-displayphoto-shrink_800_800/0/1648229907948?e=2147483647&v=beta&t=Sl2-xSVCLmzoNokd1qbyW70JdTOOCK-epw4TnGxaCFc"
-				/>
+					color={color}
+				>{getNameInitials(props.user.fullname)}</Avatar>
 				<Text
 					sx={{
 						fontWeight: 500,
@@ -47,4 +51,4 @@ const FeedItemAuthor = (props: Props) => {
 	);
 };
 
-export default FeedItemAuthor;
+export default FeedItemMeta;
