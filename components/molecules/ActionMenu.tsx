@@ -1,4 +1,5 @@
 import { ActionIcon, Menu } from "@mantine/core";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { IoEllipsisVertical } from "react-icons/io5";
@@ -28,7 +29,7 @@ const ActionMenu = (props: Props) => {
 			</Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item>Profil Saya</Menu.Item>
+        <Menu.Item component={Link} href="/me">Profil Saya</Menu.Item>
         <Menu.Item color={'red'} onClick={handleLogout}>Keluar</Menu.Item>
       </Menu.Dropdown>
 		</Menu>

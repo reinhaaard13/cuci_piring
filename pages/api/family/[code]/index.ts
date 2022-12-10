@@ -10,16 +10,10 @@ const handler = nextConnect()
 	.get(async (req: NextApiRequest, res: NextApiResponse) => {
 		const searchQuery = req.query.code as string;
 
-		try {
-			await dbConnect();
-		} catch (error) {
-			return res.status(500).json({
-				status: "error",
-				message: "Database connection error",
-			});
-		}
+		await dbConnect();
 
 		try {
+			const user = await User.findOne();
 			const family = await Family.findOne({ familyCode: searchQuery }).populate(
 				{
 					path: "members",

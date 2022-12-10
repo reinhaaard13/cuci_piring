@@ -11,14 +11,7 @@ const handler = nextConnect()
 	.post(async (req: ExtendedRequest, res: NextApiResponse) => {
 		const familyCode = req.query.code;
 
-		try {
-			await dbConnect();
-		} catch (err) {
-			return res.status(500).json({
-				status: "error",
-				message: "Database connection error",
-			});
-		}
+		await dbConnect();
 
 		const { postTitle, postDescription, image, familyId, userId } = req.body;
 

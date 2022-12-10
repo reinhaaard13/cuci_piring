@@ -10,6 +10,8 @@ export default class _Document extends Document {
 		return (
 			<Html>
 				<Head>
+					<link rel="manifest" href="/manifest.json" />
+					<link rel="apple-touch-icon" href="/icon.png" />
 					<link rel="preconnect" href="https://fonts.googleapis.com" />
 					<link rel="preconnect" href="https://fonts.gstatic.com" />
 					<link

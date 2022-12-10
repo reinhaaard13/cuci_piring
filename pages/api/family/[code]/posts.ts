@@ -4,23 +4,18 @@ import dbConnect from "../../../../lib/dbConnect";
 import checkAuth, { ExtendedRequest } from "../../../../middleware/checkAuth";
 import Family from "../../../../models/Family";
 import Post from "../../../../models/Post";
+import User from "../../../../models/User";
 
 const handler = nextConnect()
   .use(checkAuth)
   .get(async (req: ExtendedRequest, res: NextApiResponse) => {
     const familyCode = req.query.code
 
-    try {
-      await dbConnect();
-    } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message: "Database connection error",
-      });
-    }
+    await dbConnect();
 
     try {
       const Posts = await Post.findOne()
+      const user = await User.findOne()
       const family = await Family.findOne({ familyCode }).populate({
         path: "members",
         select: "fullname username",

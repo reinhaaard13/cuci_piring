@@ -7,6 +7,7 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import useColorScheme from "../../hooks/useColorScheme";
 import getNameInitials from "../../utils/getNameInitial";
 import ActionMenu from "../molecules/ActionMenu";
+import Link from "next/link";
 
 type Props = {
 	isAuthenticated: boolean;
@@ -33,14 +34,16 @@ const Header = (props: Props) => {
 				zIndex: 100,
 			})}
 		>
-			<Text
-				size={24}
-				fw={"bold"}
-				display="inline-flex"
-				sx={{ userSelect: "none" }}
-			>
-				cuci<Text fw={"normal"}>piring</Text>
-			</Text>
+			<Link href={"/"} style={{ textDecoration: "none", color: "unset" }}>
+				<Text
+					size={24}
+					fw={"bold"}
+					display="inline-flex"
+					sx={{ userSelect: "none" }}
+				>
+					cuci<Text fw={"normal"}>piring</Text>
+				</Text>
+			</Link>
 			<Box
 				sx={(theme) => ({
 					textAlign: "right",
