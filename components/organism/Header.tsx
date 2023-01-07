@@ -53,11 +53,13 @@ const Header = (props: Props) => {
 					<ActionIcon size={"lg"} variant="light" onClick={toggleColorScheme}>
 						<TbMoonStars />
 					</ActionIcon>
-					<ActionMenu />
 					{props.isAuthenticated && (
-						<Avatar color="cyan" radius={"xl"}>
-							{getNameInitials(props.name!)}
-						</Avatar>
+						<>
+							<ActionMenu />
+							<Avatar color="cyan" radius={"xl"}>
+								{getNameInitials(props.name!)}
+							</Avatar>
+						</>
 					)}
 				</Flex>
 			</Box>

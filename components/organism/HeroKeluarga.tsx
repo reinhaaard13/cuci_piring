@@ -17,10 +17,10 @@ type Props = {};
 const HeroKeluarga = (props: Props) => {
 	const { query } = useRouter();
 
-	const { data, isSuccess } = useQuery<ApiResponse<IFamily>>(["Family", query.familyCode], () =>
-	PostApi.getFamilyWithPosts(query.familyCode as string)
-);
-	
+	const { data, isSuccess } = useQuery<ApiResponse<IFamily>>(
+		["Family", query.familyCode],
+		() => PostApi.getFamilyWithPosts(query.familyCode as string)
+	);
 
 	return (
 		<Box
@@ -41,7 +41,17 @@ const HeroKeluarga = (props: Props) => {
 				height: 100,
 			})}
 		>
-			<Skeleton visible={!isSuccess}><Badge w={"fit-content"} variant="light" color={"orange"} opacity={"80%"} size={"xs"}>#{data?.data.familyCode}</Badge></Skeleton>
+			<Skeleton visible={!isSuccess}>
+				<Badge
+					w={"fit-content"}
+					variant="light"
+					color={"orange"}
+					opacity={"80%"}
+					size={"xs"}
+				>
+					#{data?.data.familyCode}
+				</Badge>
+			</Skeleton>
 			<Text
 				sx={(theme) => ({
 					fontSize: theme.fontSizes.xl,

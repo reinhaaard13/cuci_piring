@@ -4,6 +4,7 @@ import { Card, Text, Avatar } from "@mantine/core";
 import useUser from "../../hooks/useUser";
 import getNameInitials from "../../utils/getNameInitial";
 import getRandomColor from "../../utils/getRandomColor";
+import Head from "next/head";
 
 type Props = {};
 
@@ -14,6 +15,9 @@ const ProfilePage = (props: Props) => {
 
 	return (
 		<>
+			<Head>
+				<title>Me | Cuci Piring</title>
+			</Head>
 			<Card
 				radius={"md"}
 				sx={(theme) => ({
