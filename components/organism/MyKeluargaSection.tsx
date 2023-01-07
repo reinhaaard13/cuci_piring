@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 
-import { Box, Text, useMantineTheme, Card, Grid, Badge } from "@mantine/core";
+import {
+	Box,
+	Text,
+	useMantineTheme,
+	Card,
+	Grid,
+	Badge,
+	Loader,
+} from "@mantine/core";
 import Image from "next/image";
 import { useQuery } from "react-query";
 import FamilyApi from "../../services/FamilyApi";
@@ -13,14 +21,12 @@ type Props = {};
 
 const MyKeluargaSection = (props: Props) => {
 	const theme = useMantineTheme();
-	const isMobile = useMediaQuery("(max-width: 768px)");
 	const { colorScheme } = useColorScheme();
 
 	const {
 		data: familyData,
 		isSuccess,
-		isFetching,
-		isError,
+		isLoading,
 	} = useQuery("Family", FamilyApi.getMyFamily);
 
 	const isFamilyFound = isSuccess && familyData?.data?.length > 0;
@@ -34,7 +40,28 @@ const MyKeluargaSection = (props: Props) => {
 			<Text>Keluarga Saya</Text>
 
 			<Grid>
-				{isFamilyFound ? (
+				{isLoading ? (
+					<Grid.Col
+						span={12}
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							height: 100,
+							flexDirection: "column",
+						}}
+					>
+						<Loader size={"md"} color={"teal"} />
+						{/* <Text
+							sx={(themes) => ({
+								fontWeight: 500,
+							})}
+						>
+							Sedang memuat...
+						</Text> */}
+						<SedangMemuatText />
+					</Grid.Col>
+				) : isFamilyFound ? (
 					familyData.data.map((family: IFamily) => (
 						<Grid.Col md={6} key={family.familyCode}>
 							<Card
@@ -105,6 +132,35 @@ const MyKeluargaSection = (props: Props) => {
 				)}
 			</Grid>
 		</Box>
+	);
+};
+
+let interval: any = null
+const SedangMemuatText = () => {
+	const [titik, setTitik] = useState("...")
+
+	useEffect(() => {
+		interval = setInterval(() => {
+			if (titik.length === 3) {
+				setTitik(".")
+			} else {
+				setTitik(titik + ".")
+			}
+		}, 500)
+
+		return () => {
+			clearInterval(interval)
+		}
+	}, [titik])
+
+	return (
+		<Text
+			sx={(themes) => ({
+				fontWeight: 500,
+			})}
+		>
+			Sedang memuat{titik}
+		</Text>
 	);
 };
 
