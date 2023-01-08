@@ -21,6 +21,7 @@ const handler = nextConnect()
         select: "fullname username",
       }).populate({
         path: "posts",
+        // match: { isDeleted: false },
         populate: {
           path: "createdBy",
           select: "fullname username",

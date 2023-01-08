@@ -10,6 +10,7 @@ export interface IPost extends Document {
   createdAt: Date | string
   image: string
   likedBy: Types.ObjectId[] | IUser[]
+  isDeleted: boolean
 }
 
 const PostSchema = new Schema<IPost>({
@@ -29,11 +30,23 @@ const PostSchema = new Schema<IPost>({
   likedBy: {
     type: [Schema.Types.ObjectId],
     ref: "User",
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
   }
 }, {
   timestamps: {
     updatedAt: false,
   },
+})
+
+PostSchema.pre("find", function () {
+  this.where({ isDeleted: false });
+})
+
+PostSchema.pre("findOne", function () {
+  this.where({ isDeleted: false });
 })
 
 export default models.Post || model("Post", PostSchema)
