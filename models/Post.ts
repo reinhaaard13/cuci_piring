@@ -2,11 +2,11 @@ import { Schema, model, Types, models, Document } from "mongoose";
 import { IFamily } from "./Family";
 import { IUser } from "./User";
 
-export interface IPost extends Document {
+export interface IPost<TUser = Types.ObjectId | IUser> extends Document {
   postTitle: string
   postDescription: string
-  createdBy: Types.ObjectId | IUser
-  family: Types.ObjectId | IFamily
+  createdBy: TUser
+  family: Types.ObjectId | IFamily 
   createdAt: Date | string
   image: string
   likedBy: Types.ObjectId[] | IUser[]

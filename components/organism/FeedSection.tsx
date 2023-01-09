@@ -10,6 +10,7 @@ import { IFamily } from "../../models/Family";
 import Image from "next/image";
 import useColorScheme from "../../hooks/useColorScheme";
 import { IPost } from "../../models/Post";
+import { IUser } from "../../models/User";
 
 type Props = {};
 
@@ -44,7 +45,7 @@ const FeedSection = (props: Props) => {
 				{isSuccess &&
 					data &&
 					data.data.posts.map((feed) => (
-						<FeedItem key={feed._id} feed={feed as IPost} />
+						<FeedItem key={feed._id} feed={feed as IPost<IUser>} />
 					))}
 				{isLoading && (
 					<Grid.Col sm={6}>

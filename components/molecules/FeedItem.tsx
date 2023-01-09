@@ -3,18 +3,20 @@ import React from "react";
 import { Grid, useMantineTheme, Avatar } from "@mantine/core";
 import { Box, Text, Card } from "@mantine/core";
 import moment from "moment";
-import FeedItemMeta from "../atoms/FeedItemMeta";
+import FeedItemHeader from "../atoms/FeedItemHeader";
 import LikeButton from "../atoms/LikeButton";
 import Image from "next/image";
 import { IPost } from "../../models/Post";
 import { IUser } from "../../models/User";
 
 type Props = {
-	feed: IPost;
+	feed: IPost<IUser>;
 };
 
 const FeedItem = (props: Props) => {
 	const theme = useMantineTheme();
+
+	const postTime = moment(props.feed.createdAt).fromNow();
 
 	return (
 		<Grid.Col sm={6}>
@@ -29,9 +31,8 @@ const FeedItem = (props: Props) => {
 				withBorder
 			>
 				<Card.Section>
-					<FeedItemMeta
-						user={props.feed.createdBy}
-						time={props.feed.createdAt as string}
+					<FeedItemHeader
+						feed={props.feed}
 					/>
 				</Card.Section>
 
@@ -43,9 +44,7 @@ const FeedItem = (props: Props) => {
 					}}
 				>
 					<Image
-						src={
-							props.feed.image
-						}
+						src={props.feed.image}
 						alt="Feed Image"
 						fill
 						style={{ objectFit: "cover" }}
@@ -56,8 +55,21 @@ const FeedItem = (props: Props) => {
 					<Text sx={{ fontSize: theme.fontSizes.sm }}>
 						{props.feed.postDescription}
 					</Text>
+					<Text
+						sx={{
+							fontSize: theme.fontSizes.xs,
+							fontStyle: "italic",
+							color: theme.colors.gray[6],
+							paddingTop: theme.spacing.xs,
+						}}
+					>
+						{postTime}
+					</Text>
 
-					<LikeButton likedBy={props.feed.likedBy as IUser[]} postId={props.feed._id} />
+					<LikeButton
+						likedBy={props.feed.likedBy as IUser[]}
+						postId={props.feed._id}
+					/>
 				</Box>
 			</Card>
 		</Grid.Col>
