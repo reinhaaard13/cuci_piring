@@ -1,0 +1,43 @@
+.loader {
+  width: 45px;
+  /* height: 80px; */
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: jump 1s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-25px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.b {
+  animation-delay: 0.2s;
+}
+
+.c {
+  animation-delay: 0.4s;
+}
+
+.light {
+  background-color: black;
+}
+
+.dark {
+  background-color: white;
+}
