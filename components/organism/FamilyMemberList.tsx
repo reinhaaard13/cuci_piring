@@ -9,6 +9,7 @@ import {
 	useMantineTheme,
 	Avatar,
 	ActionIcon,
+	Skeleton
 } from "@mantine/core";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
@@ -30,7 +31,7 @@ const FamilyMemberList = (props: Props) => {
 
   const { query, back } = useRouter()
 
-  const { data, isSuccess, isError, isFetching } = useQuery<
+  const { data, isSuccess, isError, isLoading } = useQuery<
 		ApiResponse<IFamily>
 	>(["FamilySearch", { searchQuery: query.familyCode }], FamilyApi.getFamilyByCode);
 
@@ -68,11 +69,14 @@ const FamilyMemberList = (props: Props) => {
 			</Flex>
 
 			<Grid gutter={theme.spacing.xs} pt={theme.spacing.sm}>
+				{
+					isLoading && <Grid.Col sm={6}><Skeleton height={64} radius={'md'} /></Grid.Col>
+				}
         { isSuccess && data.data.members.map((member) => (
-          <Grid.Col md={6} key={member._id as string}>
+          <Grid.Col sm={6} key={member._id as string}>
             <FamilyMemberItem user={member as any} />
           </Grid.Col>
-        ))}
+        )) }
 			</Grid>
 		</Box>
 	);

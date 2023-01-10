@@ -56,7 +56,7 @@ const Header = (props: Props) => {
 					{props.isAuthenticated && (
 						<>
 							<ActionMenu />
-							<Avatar color="cyan" radius={"xl"}>
+							<Avatar color="cyan" radius={"xl"} component={Link} href={'/me'}>
 								{getNameInitials(props.name!)}
 							</Avatar>
 						</>
