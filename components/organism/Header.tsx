@@ -3,6 +3,7 @@ import React from "react";
 import { useMantineTheme } from "@mantine/styles";
 import { Flex, Text, ActionIcon, Box, Avatar, Menu } from "@mantine/core";
 import { TbMoonStars } from "react-icons/tb";
+import { FaSun } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
 import useColorScheme from "../../hooks/useColorScheme";
 import getNameInitials from "../../utils/getNameInitial";
@@ -15,7 +16,7 @@ type Props = {
 };
 
 const Header = (props: Props) => {
-	const { toggleColorScheme } = useColorScheme();
+	const { toggleColorScheme, colorScheme } = useColorScheme();
 
 	return (
 		<Flex
@@ -51,12 +52,12 @@ const Header = (props: Props) => {
 			>
 				<Flex gap={8} align={"center"}>
 					<ActionIcon size={"lg"} variant="light" onClick={toggleColorScheme}>
-						<TbMoonStars />
+						{colorScheme === "dark" ? <FaSun /> : <TbMoonStars />}
 					</ActionIcon>
 					{props.isAuthenticated && (
 						<>
 							<ActionMenu />
-							<Avatar color="cyan" radius={"xl"} component={Link} href={'/me'}>
+							<Avatar color="cyan" radius={"xl"} component={Link} href={"/me"}>
 								{getNameInitials(props.name!)}
 							</Avatar>
 						</>
