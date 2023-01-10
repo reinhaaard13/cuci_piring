@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Box, Text, Skeleton, Badge } from "@mantine/core";
+import { Box, Text, Skeleton, Badge, ActionIcon } from "@mantine/core";
+import { IoInformationCircleOutline } from "react-icons/io5"
 import Image from "next/image";
 
 import HeroImage from "../../public/house.png";
@@ -11,6 +12,7 @@ import spoilMembersNames from "../../utils/spoilMembersNames";
 import PostApi from "../../services/PostApi";
 import { ApiResponse } from "../../types/global";
 import { FamilyMembers, IFamily } from "../../models/Family";
+import Link from "next/link";
 
 type Props = {};
 
@@ -92,6 +94,25 @@ const HeroKeluarga = (props: Props) => {
 					bottom: 20,
 				}}
 			/>
+
+			<ActionIcon
+				sx={theme => ({
+					position: "absolute",
+					right: theme.spacing.xs,
+					bottom: theme.spacing.xs,
+					color: "white",
+
+					"&:hover": {
+						backgroundColor: "rgba(255,255,255,0.2)"
+					}
+				})}
+				radius="lg"
+				variant="subtle"
+				component={Link}
+				href={`/keluarga/${query.familyCode}/detail`}
+			>
+				<IoInformationCircleOutline />
+			</ActionIcon>
 		</Box>
 	);
 };
