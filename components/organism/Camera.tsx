@@ -22,7 +22,7 @@ const Camera = (props: Props) => {
 	const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
 	const [numberOfCameras, setNumberOfCameras] = useState(0);
 	const [stream, setStream] = useState<Stream>(null);
-	const [facingMode, setFacingMode] = useState<FacingMode>("user");
+	const [facingMode, setFacingMode] = useState<FacingMode>("environment");
 
 	const playerRef = useRef<HTMLVideoElementExtended>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -47,7 +47,7 @@ const Camera = (props: Props) => {
 					setStream(stream);
 					navigator.mediaDevices.enumerateDevices().then((r) => {
 						setNumberOfCameras(
-							r.filter((device) => device.kind === "videoinput").length
+							r.filter((device: any) => device.kind === "videoinput").length
 						);
 					});
 				});
