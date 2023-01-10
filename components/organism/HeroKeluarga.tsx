@@ -40,7 +40,7 @@ const HeroKeluarga = (props: Props) => {
 				display: "flex",
 				flexDirection: "column",
 				justifyContent: "flex-end",
-				height: 100,
+				minHeight: 100,
 			})}
 		>
 			<Skeleton visible={!isSuccess}>

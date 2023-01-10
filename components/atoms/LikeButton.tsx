@@ -22,6 +22,7 @@ const LikeButton = (props: Props) => {
 	const isLiked = props.likedBy.some((likeUser) => likeUser === user?._id);
 
 	const handleOnLike = async () => {
+		if (isLiked) return
 		await likePostMutation.mutateAsync();
 	};
 
