@@ -19,6 +19,9 @@ import useColorScheme from "../../hooks/useColorScheme";
 import { IPost } from "../../models/Post";
 import { IUser } from "../../models/User";
 import useUser from "../../hooks/useUser";
+import { useMutation, useQueryClient } from "react-query";
+import PostApi from "../../services/PostApi";
+import { showNotification } from "@mantine/notifications";
 
 type Props = {
 	feed: IPost<IUser>;
@@ -64,9 +67,30 @@ const FeedActionMenu = (props: {
 	feed: IPost<IUser>;
 }) => {
 	const [opened, setOpened] = useState(false);
-	const { user } = useUser()
+	const { user } = useUser();
 	const { colorScheme } = useColorScheme();
 	const theme = useMantineTheme();
+	const queryClient = useQueryClient()
+
+	const deletePostMutation = useMutation((id: string) => PostApi.deletePost(id), {
+		onSuccess: () => {
+			showNotification({
+				title: "Post Deleted",
+				message: "Your post has been deleted successfully",
+				color: "red"
+			})
+			setOpened(false);
+			queryClient.invalidateQueries("Family")
+		},
+		onError: (err: any) => {
+			showNotification({
+				title: "Error",
+				message: "Something went wrong, please try again later",
+				color: theme.colors.red[6],
+			})
+			console.log(err.message)
+		}
+	})
 
 	const isMyPost = props.feed.createdBy._id === user?._id;
 
@@ -82,7 +106,7 @@ const FeedActionMenu = (props: {
 		{
 			label: "Delete",
 			onClick: () => {
-					
+				deletePostMutation.mutateAsync(props.feed._id)
 			},
 			accentColor: theme.colors.red,
 		},

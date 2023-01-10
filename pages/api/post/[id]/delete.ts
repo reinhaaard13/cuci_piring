@@ -45,7 +45,7 @@ const handler = nextConnect()
 
 		return res
 			.status(200)
-			.json({ status: "success", message: "Post has been deleted", data: { post } });
+			.json({ status: "success", message: "Post has been deleted" });
 	});
 
 export default handler;
